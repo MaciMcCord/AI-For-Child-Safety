@@ -1,0 +1,3 @@
+- please run " pip install -r requirements.txt" to get the appropriate packages for this project.
+- Project will be ran on a independently developed youtube transcript API
+- The base model is credited to GeeksForGeeks, but was edited to fit our purposes.

@@ -1,0 +1,4 @@
+{
+  "python.defaultInterpreterPath": "python 3.11.9",
+  "python-envs.defaultEnvManager": "ms-python.python:system"
+}
