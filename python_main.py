@@ -15,6 +15,7 @@ from tensorflow import keras
 from keras import layers
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+
 # Load the dataset
 df = pd.read_csv('Hatespeech-data.csv')
 print(df.head())
