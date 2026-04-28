@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-10">
+    <h1 id="status" class="text-2xl font-bold">Waiting for link...</h1>
+    <div id="player" class="mt-4">
+        </div>
+    
+    <script>
+    function updateUI(videoId, isSafe) {
+        const status = document.getElementById('status');
+        const player = document.getElementById('player');
+    
+        if(isSafe) {
+            status.innerText = "This video is Kid-Friendly!";
+            status.className = "text-green-400 text-2xl font-bold";
+            player.innerHTML = `<iframe class="w-full aspect-video rounded-xl" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+        } else {
+            status.innerText = "This video is NOT Kid-Friendly!";
+            status.className = "text-red-400 text-2xl font-bold";
+            player.innerHTML = "<div class='bg-slate-800 h-64 rounded-xl flex items-center justify-center text-6xl'></div>";
+        }
+        feedback.classList.remove('hidden');
+    }
+
+    function submitFeedback(type) {
+        const feedback = document.getElementById('feedback-selection');
+        feedback.innerHTML = `<p class="text-greel-400 font-bold p-4">Feedback recorded. Thank you!</p>`;
+        console.log("User feedback: " + type);
+    }
+    </script>
+</body>
+</html>
