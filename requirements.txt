@@ -7,4 +7,5 @@ nltk
 wordcloud
 tensorflow
 keras
-flask==3.0.0youtube_transcript_api
+flask==3.0.0
+youtube_transcript_api
