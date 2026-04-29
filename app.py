@@ -15,8 +15,8 @@ LABELS  = {0: "Hate Speech", 1: "Offensive Language", 2: "Neutral"}
 model = keras.models.load_model("hatespeech_model.keras")
 
 with open("tokenizer.json", "r") as f:
-    tokenizer = tokenizer_from_json(json.load(f))
-
+    tokenizer = tokenizer_from_json(f.read())
+    
 # ── Predict ───────────────────────────────────────────────────────────────────
 def predict(video_id: str) -> dict:
     lines = get_transcript(video_id)

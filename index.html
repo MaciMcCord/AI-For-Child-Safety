@@ -19,6 +19,19 @@
         <div class="text-center">
             <h1 id="status" class="text-xl font-semibold mb-4 text-gray-400">Waiting for a link...</h1>
         </div>
+       <!--Maci's test-->
+        <div id="feedback" class="hidden text-center mt-6">
+    <p class="text-gray-400 mb-3">Was this result accurate?</p>
+    <div id="feedback-selection" class="flex justify-center gap-4">
+        <button onclick="submitFeedback('correct')"
+                class="bg-green-700 hover:bg-green-600 px-5 py-2 rounded-lg font-semibold transition">
+            ✓ Correct
+        </button>
+        <button onclick="submitFeedback('incorrect')"
+                class="bg-red-700 hover:bg-red-600 px-5 py-2 rounded-lg font-semibold transition">
+            ✗ Incorrect
+        </button>
+    </div>
     </div>
     
     <script>
@@ -32,7 +45,7 @@
 
         document.getElementById('status').innerText = "Analyzing...";
         document.getElementById('status').className = "text-xl font-semibold mb-4 text-gray-400";
-
+        document.getElementById('feedback').classList.add('hidden');
         fetch(`/analyze?url=${encodeURIComponent(url)}`)
             .then(response => response.json())
             .then(data => {
@@ -46,7 +59,8 @@
 
     function updateUI(status) {
         const statusElement = document.getElementById('status');
-    
+        //macis test
+        const feedback = document.getElementById('feedback');
         if(status === "SAFE") {
             statusElement.innerText = "Safe: Video is Kid-Friendly!";
             statusElement.className = "text-green-400 text-2xl font-bold mb-4";
@@ -59,7 +73,7 @@
 
     function submitFeedback(type) {
         const feedback = document.getElementById('feedback-selection');
-        feedback.innerHTML = `<p class="text-greel-400 font-bold p-4">Feedback recorded. Thank you!</p>`;
+        feedback.innerHTML = `<p class="text-green-400 font-bold p-4">Feedback recorded. Thank you!</p>`;
         console.log("User feedback: " + type);
     }
     </script>
