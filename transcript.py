@@ -25,12 +25,7 @@ def chunk(text, chunk_size = 12, stride = 6):
     
     return chunks
     
-    
-    
-    
-    
-    
-    
+     
 # Function to clean the transcript text
 
 def clean(text):

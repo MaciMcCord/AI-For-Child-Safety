@@ -9,3 +9,4 @@ tensorflow
 keras
 flask==3.0.0
 #import json
+youtube_transcript_api
