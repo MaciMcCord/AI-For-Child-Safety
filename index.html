@@ -2,72 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-900 text-white p-10 font-sans">
-    
-    <div class="max-w-3xl mx-auto">
-        <h1 class="text-3xl font-bold mb-6 text-center">AI Safety Monitor</h1>
-        
-        <div class="flex gap-2 mb-8 bg-slate-800 p-4 rounded-xl border border-slate-700">
-            <input type="text" id="videoUrl" placeholder="Paste YouTube URL here..." 
-                   class="flex-grow p-3 rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button onclick="startAnalysis()" 
-                    class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-bold transition">Analyze</button>
+<body class="bg-slate-900 text-white p-10">
+    <h1 id="status" class="text-2xl font-bold">Waiting for link...</h1>
+    <div id="player" class="mt-4">
         </div>
-
-        <div class="text-center">
-            <h1 id="status" class="text-xl font-semibold mb-4 text-gray-400">Waiting for a link...</h1>
-            
-            <div id="player" class="w-full aspect-video bg-black rounded-xl border-4 border-slate-800 flex items-center justify-center shadow-2xl overflow-hidden">
-                <span class="text-gray-500 text-lg">Video Player Area</span>
-            </div>
-        </div>
-    </div>
     
     <script>
-    function extractId(url) {
-        const regex = /(?:(?:www\.)?youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^#&?]*)/;
-        const match = url.match(regex);
-        return match ? match[1] : null;
-    }
-
-    async function startAnalysis() {
-        const url = document.getElementById('videoUrl').value;
-        const videoId = extractId(url);
-        
-        if (!videoId) {
-            alert("Please enter a valid YouTube URL");
-            return;
-        }
-
-        // Show video immediately
-        updateUI(videoId, true); 
-
-        // Background analysis
-        document.getElementById('status').innerText = "Analyzing in background...";
-        fetch(`/analyze/${videoId}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('status').innerText = data.status === "SAFE" ? "Video is Safe" : "Video is Blocked";
-            })
-            .catch(err => console.log("Analysis error"));
-    }
-
     function updateUI(videoId, isSafe) {
         const status = document.getElementById('status');
         const player = document.getElementById('player');
     
         if(isSafe) {
-            status.innerText = "Safe: Video is Kid-Friendly!";
-            status.className = "text-green-400 text-2xl font-bold mb-4";
-            player.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            status.innerText = "This video is Kid-Friendly!";
+            status.className = "text-green-400 text-2xl font-bold";
+            player.innerHTML = `<iframe class="w-full aspect-video rounded-xl" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
         } else {
-            status.innerText = "Blocked: This video is NOT Kid-Friendly!";
-            status.className = "text-red-400 text-2xl font-bold mb-4";
-            player.innerHTML = "<div class='text-6xl'>🔒</div>";
+            status.innerText = "This video is NOT Kid-Friendly!";
+            status.className = "text-red-400 text-2xl font-bold";
+            player.innerHTML = "<div class='bg-slate-800 h-64 rounded-xl flex items-center justify-center text-6xl'></div>";
         }
+        feedback.classList.remove('hidden');
+    }
+
+    function submitFeedback(type) {
+        const feedback = document.getElementById('feedback-selection');
+        feedback.innerHTML = `<p class="text-greel-400 font-bold p-4">Feedback recorded. Thank you!</p>`;
+        console.log("User feedback: " + type);
     }
     </script>
 </body>

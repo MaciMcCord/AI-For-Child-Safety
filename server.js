@@ -1,11 +1,7 @@
-import express from 'express';
-import { spawn } from 'child_process';
-import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const express = require('express');
+const { spawn } = require('child_process');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const port = 5500;
@@ -15,7 +11,8 @@ app.use(express.static(__dirname));
 
 app.get('/analyze/:videoId', (req, res) => {
     const videoId = req.params.videoId;
-    const pythonProcess = spawn('python', ['Testing.py', videoId]);
+    
+    const pythonProcess = spawn('python', ['app.py', videoId]);
 
     pythonProcess.stdout.on('data', (data) => {
         const result = data.toString().trim();
