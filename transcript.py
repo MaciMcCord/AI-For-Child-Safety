@@ -101,7 +101,6 @@ try:
 except Exception as e:
     print("Error:", str(e))
 
-#maci's test
 def get_transcript(video_id: str):
     ytt_api = YouTubeTranscriptApi()
     try:

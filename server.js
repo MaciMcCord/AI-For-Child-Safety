@@ -36,7 +36,7 @@ app.get("/analyze", (req, res) => {
   pythonProcess.stderr.on("data", (data) => {
     console.error(`Python Error: ${data}`);
   });
-  //macis test
+
   pythonProcess.on("close", (code) => {
     try {
       const result = JSON.parse(output.trim());
