@@ -1,7 +1,6 @@
 import express from 'express';
 import { spawn } from 'child_process';
 import path from 'path';
-import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,8 +12,20 @@ const port = 3000;
 app.use(express.json());
 app.use(express.static(__dirname));
 
-app.get('/analyze/:videoId', (req, res) => {
-    const videoId = req.params.videoId;
+function extractVideoId(url) {
+    const pattern = /(?:v=|\/)([0-9A-Za-z_-]{11})/;
+    const match = url.match(pattern);
+    return match ? match[1] : null;
+}
+
+app.get('/analyze', (req, res) => {
+    const fullUrl = req.query.url;
+    const videoId = extractVideoId(fullUrl);
+
+    if (!videoId) {
+        return res.status(400).json({ error: 'Invalid YouTube URL' });
+    }
+
     const pythonProcess = spawn('python', ['Testing.py', videoId]);
 
     pythonProcess.stdout.on('data', (data) => {
@@ -24,16 +35,6 @@ app.get('/analyze/:videoId', (req, res) => {
 
     pythonProcess.stderr.on('data', (data) => {
         console.error(`Python Error: ${data}`);
-    });
-});
-
-app.post('/feedback', (req, res) => {
-    const { videoId, type } = req.body;
-    const logEntry = `${videoId},${type}\n`;
-    
-    fs.appendFile('feedback.csv', logEntry, (err) => {
-        if (err) return res.status(500).send("Error saving feedback");
-        res.send("Feedback logged");
     });
 });
 

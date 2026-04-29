@@ -19,54 +19,41 @@
 
         <div class="text-center">
             <h1 id="status" class="text-xl font-semibold mb-4 text-gray-400">Waiting for a link...</h1>
-            
-            <div id="player" class="w-full aspect-video bg-black rounded-xl border-4 border-slate-800 flex items-center justify-center shadow-2xl overflow-hidden">
-                <span class="text-gray-500 text-lg">Video Player Area</span>
-            </div>
         </div>
     </div>
     
     <script>
-    function extractId(url) {
-        const regex = /(?:(?:www\.)?youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^#&?]*)/;
-        const match = url.match(regex);
-        return match ? match[1] : null;
-    }
-
     async function startAnalysis() {
         const url = document.getElementById('videoUrl').value;
-        const videoId = extractId(url);
         
-        if (!videoId) {
+        if (!url) {
             alert("Please enter a valid YouTube URL");
             return;
         }
 
-        // Show video immediately
-        updateUI(videoId, true); 
+        document.getElementById('status').innerText = "Analyzing...";
+        document.getElementById('status').className = "text-xl font-semibold mb-4 text-gray-400";
 
-        // Background analysis
-        document.getElementById('status').innerText = "Analyzing in background...";
-        fetch(`/analyze/${videoId}`)
+        fetch(`/analyze?url=${encodeURIComponent(url)}`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('status').innerText = data.status === "SAFE" ? "Video is Safe" : "Video is Blocked";
+                updateUI(data.status);
             })
-            .catch(err => console.log("Analysis error"));
+            .catch(err => {
+                console.error("Analysis error:", err);
+                document.getElementById('status').innerText = "Error analyzing video.";
+            });
     }
 
-    function updateUI(videoId, isSafe) {
-        const status = document.getElementById('status');
-        const player = document.getElementById('player');
+    function updateUI(status) {
+        const statusElement = document.getElementById('status');
     
-        if(isSafe) {
-            status.innerText = "Safe: Video is Kid-Friendly!";
-            status.className = "text-green-400 text-2xl font-bold mb-4";
-            player.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        if(status === "SAFE") {
+            statusElement.innerText = "Safe: Video is Kid-Friendly!";
+            statusElement.className = "text-green-400 text-2xl font-bold mb-4";
         } else {
-            status.innerText = "Blocked: This video is NOT Kid-Friendly!";
-            status.className = "text-red-400 text-2xl font-bold mb-4";
-            player.innerHTML = "<div class='text-6xl'>🔒</div>";
+            statusElement.innerText = "Blocked: This video is NOT Kid-Friendly!";
+            statusElement.className = "text-red-400 text-2xl font-bold mb-4";
         }
     }
     </script>
