@@ -12,7 +12,7 @@ app.use(express.static(__dirname));
 app.get('/analyze/:videoId', (req, res) => {
     const videoId = req.params.videoId;
     
-    const pythonProcess = spawn('python', ['Testing.py', videoId]);
+    const pythonProcess = spawn('python', ['app.py', videoId]);
 
     pythonProcess.stdout.on('data', (data) => {
         const result = data.toString().trim();
